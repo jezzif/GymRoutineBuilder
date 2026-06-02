@@ -1,19 +1,4 @@
 import csv
-
-# Function that sorts an array using the selection sort algorithm
-# Parameters:
-# array - the array to be sorted
-# size - the size of the array
-def SelectionSort(array, size):
-    for i in range(size):
-        min_idx = i
-
-        for j in range(i + 1, size):
-            if array[j].value < array[min_idx].value:
-                min_idx = j
-
-        (array[i], array[min_idx]) = (array[min_idx], array[i])
-    return array
     
 # Function that reads user input and validates that it is an integer between to set numbers
 # Parameters:
