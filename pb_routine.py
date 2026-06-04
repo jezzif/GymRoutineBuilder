@@ -48,14 +48,14 @@ class PbarsRoutine(Routine):
             choice = cursor.fetchone()        
             # Print the chosen skill and create a new skill object
             print(choice[0])
-            newSkill = self.make_newSkill(choice)
+            newSkill = self.make_newSkill(choice, "new")
             print(choice)
             # Returns the chosen skill as an object
             return newSkill
         else:
             return "cancel"
         
-    def make_newSkill(self, choice):
+    def make_newSkill(self, choice, task):
         if choice[3] == "I":
             newSkill = skill.PbarsSkill(choice[0], choice[1], choice[2], choice[3], choice[4], choice[5], None, None)
         elif choice[3] == "II" or choice[3] == "IV":
@@ -63,12 +63,32 @@ class PbarsRoutine(Routine):
         elif choice[3] == "III":
             newSkill = skill.PbarsSkill(choice[0], choice[1], choice[2], choice[3], choice[4], None, choice[5], choice[6])
         return newSkill
-        
-    def validate_routine(self):
-        super().validate_routine()
 
     def special_repititions(self, skill):
-        return super().special_repititions(skill)
+        fwdUpriseExists = 0
+        giantSwingExists = 0
+        felgeSwingExists = 0
+        if skill.eg == "I" or skill.eg == "III":
+            for i in range(len(self.countingElements)):
+                if self.countingElements[i].fwdUprise == "1":
+                    fwdUpriseExists += 1
+                elif self.countingElements[i].giantSwing == "1":
+                    giantSwingExists += 1
+                elif self.countingElements[i].felgeSwing == "I":
+                    felgeSwingExists += 1
+            if skill.fwdUprise == "1" and fwdUpriseExists >= 2:
+                print("This routine has more than 2 front uprise through handstand style elements and only the highest 2 valued skills will be counted")
+                return False
+            elif skill.giantSwing == "1" and giantSwingExists >= 2:
+                print("This routine has more than 2 giant swings through handstand style elements and only the highest 2 valued skills will be counted")
+                return False
+            elif skill.felgeSwing == "1" and felgeSwingExists >= 2:
+                print("This routine has more than 2 felge swings through handstand style elements and only the highest 2 valued skills will be counted")
+                return False
+            else:
+                return True
+        else:
+            return True
 
     # Overrides the default make_table method
     # Procedure to make a new table in the Routines database

@@ -62,6 +62,21 @@ class Routine:
         # for i in range(len(self.countingElements)):
         #     print(self.countingElements[i].name)
         # print()
+        if self.apparatus == "Still Rings":
+            swingToHSExists = False
+            for i in range(len(self.countingElements)):
+                if self.countingElements[i].eg == "I" and self.countingElements[i].swingToHS == "1":
+                    swingToHSExists = True
+            i = 0
+            print(len(sortedSkills))
+            while i < len(sortedSkills) and not swingToHSExists:
+                print(f"Iteration: {i}")
+                print(sortedSkills[i].name)
+                if sortedSkills[i].eg == "I" and sortedSkills[i].swingToHS == "1":
+                    self.countingElements.append(sortedSkills.pop(i))
+                    swingToHSExists = True
+                else:
+                    i += 1
 
         # Sets the amount of times for the next loop to iterate
         # to avoid index out of range if there are less than 8 skills in the routine
@@ -117,16 +132,16 @@ class Routine:
             print("More than 8 skills can be included but, only 8 skills including the dismount can contribute to the D-score of a routine.")
         else:
             print("Routine has enough skills.")
-        if iTaken > 4:
+        if self.hasEGI > 4:
             print("This routine has more than 4 skills from element group 1, only the 4 highest will be counted.")
-        if iiTaken > 4:
+        if self.hasEGII > 4:
             print("This routine has more than 4 skills from element group 2, only the 4 highest will be counted.")
-        if iiiTaken > 4:
+        if self.hasEGIII > 4:
             print("This routine has more than 4 skills from element group 3, only the 4 highest will be counted.")
-        if self.apparatus != "Floor Exercise" and ivTaken > 1:
+        if self.apparatus != "Floor Exercise" and self.hasEGIV > 1:
             self.isValid = False
             print("This routine has more than 1 dismount and isn't a valid routine")
-        elif ivTaken > 4:
+        elif self.hasEGIV > 4:
             print("This routine has more than 4 skills from element group 4, only the 4 highest will be counted.")
             
         print()
@@ -323,35 +338,35 @@ class Routine:
                             contents.append([self.skills[i].name, self.skills[i].description, self.skills[i].value, self.skills[i].eg, self.skills[i].number, self.skills[i].strengthElement, self.skills[i].circleElement, self.skills[i].oneLegBalance, self.skills[i].doubleSalto])
                     elif self.apparatus == "Pommel Horse":
                         # sql query for inserting skills
-                        insertStatement = ", fullSpindle, fullSpindleTravels, fullCrossSupTravels, fullRussianTravels) VALUES(?,?,?,?,?,?,?,?,?)"
+                        insertStatement += ", fullSpindle, fullSpindleTravels, fullCrossSupTravels, fullRussianTravels) VALUES(?,?,?,?,?,?,?,?,?)"
                         # Creates an array for the sql query to execute from
                         contents = []
                         for i in range(len(self.skills)):
                             contents.append([self.skills[i].name, self.skills[i].description, self.skills[i].value, self.skills[i].eg, self.skills[i].number, self.skills[i].fullSpindle, self.skills[i].fullSpindleTravels, self.skills[i].fullCrossSupTravels, self.skills[i].fullRussianTravels])
                     elif self.apparatus == "Still Rings":
                         # sql query for inserting skills
-                        insertStatement = ", swingToHS, strengthShape) VALUES(?,?,?,?,?,?,?)"
+                        insertStatement += ", swingToHS, strengthShape) VALUES(?,?,?,?,?,?,?)"
                         # Creates an array for the sql query to execute from
                         contents = []
                         for i in range(len(self.skills)):
                             contents.append([self.skills[i].name, self.skills[i].description, self.skills[i].value, self.skills[i].eg, self.skills[i].number, self.skills[i].swingToHS, self.skills[i].strengthShape])
                     elif self.apparatus == "Vault":
                         # sql query for inserting skills
-                        insertStatement = ") VALUES(?,?,?,?,?)"
+                        insertStatement += ") VALUES(?,?,?,?,?)"
                         # Creates an array for the sql query to execute from
                         contents = []
                         for i in range(len(self.skills)):
                             contents.append([self.skills[i].name, self.skills[i].description, self.skills[i].value, self.skills[i].eg, self.skills[i].number])
                     elif self.apparatus == "Parallel Bars":
                         # sql query for inserting skills
-                        insertStatement = ", fwdUprise, giantSwing, felgeSwing) VALUES(?,?,?,?,?,?,?,?)"
+                        insertStatement += ", fwdUprise, giantSwing, felgeSwing) VALUES(?,?,?,?,?,?,?,?)"
                         # Creates an array for the sql query to execute from
                         contents = []
                         for i in range(len(self.skills)):
                             contents.append([self.skills[i].name, self.skills[i].description, self.skills[i].value, self.skills[i].eg, self.skills[i].number, self.skills[i].fwdUprise, self.skills[i].giantSwing, self.skills[i].felgeSwing])
                     elif self.apparatus == "Horizontal Bar":
                         # sql query for inserting skills
-                        insertStatement = ", adlerType) VALUES(?,?,?,?,?,?)"
+                        insertStatement += ", adlerType) VALUES(?,?,?,?,?,?)"
                         # Creates an array for the sql query to execute from
                         contents = []
                         for i in range(len(self.skills)):

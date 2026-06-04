@@ -48,14 +48,14 @@ class RingsRoutine(Routine):
             choice = cursor.fetchone()        
             # Print the chosen skill and create a new skill object
             print(choice[0])
-            newSkill = self.make_newSkill(choice)
+            newSkill = self.make_newSkill(choice, "new")
             print(choice)
             # Returns the chosen skill as an object
             return newSkill
         else:
             return "cancel"
         
-    def make_newSkill(self, choice):
+    def make_newSkill(self, choice, task):
         if choice[3] == "I":
             newSkill = skill.RingsSkill(choice[0], choice[1], choice[2], choice[3], choice[4], choice[5], None)
         elif choice[3] == "II" or choice[3] == "III":
@@ -63,6 +63,39 @@ class RingsRoutine(Routine):
         elif choice[3] == "IV":
             newSkill = skill.RingsSkill(choice[0], choice[1], choice[2], choice[3], choice[4], None, None)
         return newSkill
+    
+    def validate_routine(self):
+        super().validate_routine()
+        swingToHSExists = False
+        for i in range(len(self.countingElements)):
+            if self.countingElements[i].eg == "I" and self.countingElements[i].swingToHS == "1":
+                swingToHSExists = True
+        if not swingToHSExists:
+            print("This routine does not have a swing to handstand element.")
+            print("A rings routine needs to have one element within the couting 8 that is a swing to handstand.")
+            self.isValid = False
+    
+    def special_repititions(self, skill):
+        egIIstrengths = []
+        egIIIstrengths = []
+        if skill.eg == "II" or skill.eg == "III":
+            for i in range(len(self.countingElements)):
+                if self.countingElements[i].eg == "II":
+                    egIIstrengths.append(self.countingElements[i].strengthShape)
+                elif self.countingElements[i].eg == "III":
+                    egIIIstrengths.append(self.countingElements[i].strengthShape)
+            if skill.eg == "II":
+                for i in range(len(egIIstrengths)):
+                    if skill.strengthShape == egIIstrengths[i]:
+                        return False
+            elif skill.eg == "III":
+                for i in range(len(egIIIstrengths)):
+                    if skill.strengthShape == egIIIstrengths[i]:
+                        return False
+            else:
+                return True
+        else:
+            return True
 
     # Overrides the default make_table method
     # Procedure to make a new table in the Routines database
