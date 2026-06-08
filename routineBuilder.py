@@ -14,7 +14,7 @@ import tableMaker
 import connectors
 import sqlite3
 
-class Program:
+class RoutineBuilder:
     def main(self):
         while True:
             #Create or load Code of Points database on local machine.
@@ -161,4 +161,4 @@ class Program:
                             cursor.execute(query)
 
 if __name__ == '__main__':
-    Program.main(Program)
+    RoutineBuilder.main(RoutineBuilder)
